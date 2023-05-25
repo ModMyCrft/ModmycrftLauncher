@@ -33,7 +33,7 @@ public class Game extends Thread implements Runnable{
 		this.libDir = libDir + "\\";
 		if(this.gameDir.equals("default")) {
 			this.isGameDirNotDefault = false;
-			this.minecraftDir = "";
+			this.gameDir = "";
 		}
 		if(this.libDir.equals("default\\")) {
 			this.libDir = System.getProperty("user.dir") + "\\lib\\";
@@ -86,11 +86,11 @@ public class Game extends Thread implements Runnable{
 					}
 					Process process = null;
 					System.out.println(this.java + " -Xms" + this.minRam + "m -Xmx" + this.maxRam + "m " + this.javaArgs + " -Djava.library.path=" + libDir + "natives\\ -cp \"" + this.jarsDir + "" + "modmycrft.jar;" + this.jarsDir + "lwjgl.jar;" + this.jarsDir + "lwjgl_util.jar;" + this.jarsDir + "jinput.jar\" net.minecraft.client.Minecraft "+this.username+ " 0");
-					if(this.connectToServer && this.isMinecraftDirNotDefault) {
+					if(this.connectToServer && this.isGameDirNotDefault) {
 						process = Runtime.getRuntime().exec(this.java + " -Xms" + this.minRam + "m -Xmx" + this.maxRam + "m " + this.javaArgs + " -Djava.library.path=" + libDir + "natives\\ -cp \"" + this.jarsDir + "" + "modmycrft.jar;" + this.libDir + "lwjgl.jar;" + this.libDir + "lwjgl_util.jar;" + this.libDir + "jinput.jar\" net.minecraft.client.Minecraft "+this.username+ " 0 " + this.defaultServer + "McDir=" + gameDir);
-					} else if (this.connectToServer && !this.isMinecraftDirNotDefault){
+					} else if (this.connectToServer && !this.isGameDirNotDefault){
 						process = Runtime.getRuntime().exec(this.java + " -Xms" + this.minRam + "m -Xmx" + this.maxRam + "m " + this.javaArgs + " -Djava.library.path=" + libDir + "natives\\ -cp \"" + this.jarsDir + "" + "modmycrft.jar;" + this.libDir + "lwjgl.jar;" + this.libDir + "lwjgl_util.jar;" + this.libDir + "jinput.jar\" net.minecraft.client.Minecraft "+this.username+ " 0 " + this.defaultServer);
-					} else if(this.isMinecraftDirNotDefault && !this.connectToServer){
+					} else if(this.isGameDirNotDefault && !this.connectToServer){
 						process = Runtime.getRuntime().exec(this.java + " -Xms" + this.minRam + "m -Xmx" + this.maxRam + "m " + this.javaArgs + " -Djava.library.path=" + libDir + "natives\\ -cp \"" + this.jarsDir + "" + "modmycrft.jar;" + this.libDir + "lwjgl.jar;" + this.libDir + "lwjgl_util.jar;" + this.libDir + "jinput.jar\" net.minecraft.client.Minecraft "+this.username+ " 0 " + "McDir=" + gameDir);
 					} else {
 						process = Runtime.getRuntime().exec(this.java + " -Xms" + this.minRam + "m -Xmx" + this.maxRam + "m " + this.javaArgs + " -Djava.library.path=" + libDir + "natives\\ -cp \"" + this.jarsDir + "" + "modmycrft.jar;" + this.libDir + "lwjgl.jar;" + this.libDir + "lwjgl_util.jar;" + this.libDir + "jinput.jar\" net.minecraft.client.Minecraft "+this.username+ " 0");
