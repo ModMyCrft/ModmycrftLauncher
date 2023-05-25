@@ -49,25 +49,33 @@ public class Game extends Thread implements Runnable{
 		this.maxRam = maxRam;
 		this.java = java;
 		this.jarsDir = jarsDir + "\\";
+		if(this.jarsDir.equals("default\\")) {
+			this.jarsDir = System.getProperty("user.dir") + "\\jars\\";
+		}
 	}
-	public void startGame() {
+	public void startGameServer(){
+		if (this.username == null && this.password == null) {
+		if(!(new File(jarsDir, "modmycrft_server.jar")).exists()) {
+			Gui.showError("Error with starting game: server isn't exists!");
+			return;
+		}
 		Runnable threadTask = () -> {
-			if (this.username == null && this.offlineMode == (Boolean) null && this.password == null && this.disableConsole == (Boolean)null) {
-				try {
+			try {
 					System.out.println(maxRam);
-					if(!(new File(jarsDir, "modmycrft_server.jar")).exists()) {
-						Gui.showError("Error with starting game: server isn't exists!");
-						return;
-					}
 					Process process = Runtime.getRuntime().exec(this.java +  " -Xms" + this.minRam + "m -Xmx" + this.maxRam + "m -jar " + this.jarsDir + "modmycrft_server.jar");
 					while(process.isAlive()) {}
 					this.interrupt();
 			} catch(IOException e) {
 				Gui.showError("Error with starting game: IOException!");
 			}
-				} else {      
-				try {
-					System.out.println(jarsDir);
+		};
+		Thread gameThread = new Thread(threadTask);
+		gameThread.setName("ModMyCrftGameServer");
+		gameThread.start();
+		}
+	}
+	public void startGame() {
+		if(this.password != null && this.username != null){
 					if(!(new File(this.jarsDir, "modmycrft.jar")).exists()) {
 						Gui.showError("Error with starting game: client isn't exists!");
 						return;
@@ -84,31 +92,30 @@ public class Game extends Thread implements Runnable{
 						Gui.showError("Error with starting game: lib isn't exists!");
 						return;
 					}
+					Runnable threadTask = () -> {
+					try {
+					StringBuilder processString = new StringBuilder(this.java + " -Xms" + this.minRam + "m -Xmx" + this.maxRam + "m " + this.javaArgs + " -Djava.library.path=" + libDir + "natives\\ -cp \"" + this.jarsDir + "" + "modmycrft.jar;" + this.libDir + "lwjgl.jar;" + this.libDir + "lwjgl_util.jar;" + this.libDir + "jinput.jar\" net.minecraft.client.Minecraft "+this.username+ " 0");
 					Process process = null;
-					System.out.println(this.java + " -Xms" + this.minRam + "m -Xmx" + this.maxRam + "m " + this.javaArgs + " -Djava.library.path=" + libDir + "natives\\ -cp \"" + this.jarsDir + "" + "modmycrft.jar;" + this.jarsDir + "lwjgl.jar;" + this.jarsDir + "lwjgl_util.jar;" + this.jarsDir + "jinput.jar\" net.minecraft.client.Minecraft "+this.username+ " 0");
-					if(this.connectToServer && this.isGameDirNotDefault) {
-						process = Runtime.getRuntime().exec(this.java + " -Xms" + this.minRam + "m -Xmx" + this.maxRam + "m " + this.javaArgs + " -Djava.library.path=" + libDir + "natives\\ -cp \"" + this.jarsDir + "" + "modmycrft.jar;" + this.libDir + "lwjgl.jar;" + this.libDir + "lwjgl_util.jar;" + this.libDir + "jinput.jar\" net.minecraft.client.Minecraft "+this.username+ " 0 " + this.defaultServer + "McDir=" + gameDir);
-					} else if (this.connectToServer && !this.isGameDirNotDefault){
-						process = Runtime.getRuntime().exec(this.java + " -Xms" + this.minRam + "m -Xmx" + this.maxRam + "m " + this.javaArgs + " -Djava.library.path=" + libDir + "natives\\ -cp \"" + this.jarsDir + "" + "modmycrft.jar;" + this.libDir + "lwjgl.jar;" + this.libDir + "lwjgl_util.jar;" + this.libDir + "jinput.jar\" net.minecraft.client.Minecraft "+this.username+ " 0 " + this.defaultServer);
-					} else if(this.isGameDirNotDefault && !this.connectToServer){
-						process = Runtime.getRuntime().exec(this.java + " -Xms" + this.minRam + "m -Xmx" + this.maxRam + "m " + this.javaArgs + " -Djava.library.path=" + libDir + "natives\\ -cp \"" + this.jarsDir + "" + "modmycrft.jar;" + this.libDir + "lwjgl.jar;" + this.libDir + "lwjgl_util.jar;" + this.libDir + "jinput.jar\" net.minecraft.client.Minecraft "+this.username+ " 0 " + "McDir=" + gameDir);
-					} else {
-						process = Runtime.getRuntime().exec(this.java + " -Xms" + this.minRam + "m -Xmx" + this.maxRam + "m " + this.javaArgs + " -Djava.library.path=" + libDir + "natives\\ -cp \"" + this.jarsDir + "" + "modmycrft.jar;" + this.libDir + "lwjgl.jar;" + this.libDir + "lwjgl_util.jar;" + this.libDir + "jinput.jar\" net.minecraft.client.Minecraft "+this.username+ " 0");
+					if(this.connectToServer) {
+						processString.append(" " + this.defaultServer);
+					} 
+					if(this.isGameDirNotDefault){
+						processString.append(" McDir=" + gameDir);
+					} 
+					process = Runtime.getRuntime().exec(processString.toString());
+					Launcher launcher = new Launcher();
+					if(!this.disableConsole) {
+						launcher.clientConsole(process);
 					}
-					
-				Launcher launcher = new Launcher();
-				if(!this.disableConsole) {
-					launcher.clientConsole(process);
-				}
-				while(process.isAlive()) {}
-				this.interrupt();
-				} catch(IOException e) {
+					while(process.isAlive()) {}
+						this.interrupt();
+					} catch(IOException e) {
 					Gui.showError("Error with starting game: IOException!");
-				}
-				}
-		};
-		Thread gameThread = new Thread(threadTask);
-		gameThread.setName("ModMyCrftGame");
-		gameThread.start();
+					}
+				};
+				Thread gameThread = new Thread(threadTask);
+				gameThread.setName("ModMyCrftGame");
+				gameThread.start();
+		}
 	}
 }

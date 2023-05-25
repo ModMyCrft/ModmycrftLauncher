@@ -596,6 +596,6 @@ public class Gui extends JFrame{
 			return hm;
 	}
 	public static void showError(String message) {
-		JOptionPane.showInternalMessageDialog(null, message,"Launcher Error",JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, message,"Launcher Error",JOptionPane.ERROR_MESSAGE);
 	}
 }

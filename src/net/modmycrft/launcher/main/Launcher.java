@@ -37,7 +37,7 @@ public class Launcher {
 	}	
 	public void launchServer(int maxRam,String java,String jarsDir) {
 		Game startGame = new Game(maxRam,maxRam, jarsDir, java);
-		startGame.startGame();
+		startGame.startGameServer();
 	}
 
 	public void unzip(InputStream is, Path targetDir) throws IOException {
@@ -152,7 +152,7 @@ public class Launcher {
 			out.put("JarsDirectory", jarsDir);
 			out.put("LibDirectory", libDir);
 			return out;
-			}		
+			}				
 	}
 
 	public void setOptionsToFile(int MaxRam, String username, int MaxRamServ, boolean consoleDisable, boolean discordRPCUse, String mineDir, String java, String jarsDir, String libDir, boolean connectToServer, String defaultServer, String javaArgs) throws IOException {
