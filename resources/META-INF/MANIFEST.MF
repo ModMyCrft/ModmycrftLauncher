@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Created-By: 1.8.0_362
-Main-Class: net.modmycrft.launcher.main.LauncherInit
-Class-Path: launcherLib/discord-rpc.jar
