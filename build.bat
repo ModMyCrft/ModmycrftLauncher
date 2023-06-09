@@ -13,13 +13,5 @@ cd temp
 echo CREATING A JAR...
 jar cfm ../out/Launcher.jar ../resources/META-INF/MANIFEST.MF net/ 
 cd..
-cd out
-mkdir jars
-mkdir lib
-mkdir launcherLib
-cd..
-xcopy "resources\jars" "out\jars\" /s/h/e/k/f/c/y
-xcopy "resources\lib" "out\lib\" /s/h/e/k/f/c/y
-xcopy "resources\launcherLib" "out\launcherLib\" /s/h/e/k/f/c/y
 echo DONE. LAUNCHER IN OUT/
 pause
