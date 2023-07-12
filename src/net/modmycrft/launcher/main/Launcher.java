@@ -25,6 +25,7 @@ public class Launcher {
 
 	public static void startRPC() {
 		if(rpc) {
+			updateDiscordRPCThread();
 			launcherDiscordRPC.start();
 		}
 	}
